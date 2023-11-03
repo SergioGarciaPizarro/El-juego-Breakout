@@ -131,6 +131,15 @@ document.addEventListener('keyup', function(e) {
   }
 });
 
+// Dibujar un círculo
+context.beginPath();
+context.arc(95, 75, 10, 0, Math.PI*2, true);
+context.fillStyle = "white";
+context.closePath();
+context.fill();
+
+
+
 // iniciar juego
 requestAnimationFrame(loop);
 
