@@ -1,42 +1,50 @@
 const canvas = document.getElementById('myCanvas');
 const context = canvas.getContext('2d');
 
-// Cada fila tiene 14 ladrillos de largo. El nivel consta de 6 filas en blanco y luego 8 filas
-//de 4 colores: rojo, naranja, verde y amarillo
+const divJuego = document.querySelector('.juego');
+
+// Obtener las dimensiones del div "juego"
+const divAncho = divJuego.offsetWidth;
+const divAlto = divJuego.offsetHeight;
+
+// Establecer las dimensiones del canvas como las del div "juego"
+canvas.width = divAncho;
+canvas.height = divAlto;
+
 const level1 = [
   [],
-  [],
-  [],
+  ['N','P','P','P','P','P','N','N','P','P','P','P','P','N'],
+  ['N','P','P','P','P','P','N','N','P','P','P','P','P','N'],
   [],
   [],
   [],
   ['R','R','R','R','R','R','R','R','R','R','R','R','R','R'],
   ['R','R','R','R','R','R','R','R','R','R','R','R','R','R'],
-  ['O','O','O','O','O','O','O','O','O','O','O','O','O','O'],
-  ['O','O','O','O','O','O','O','O','O','O','O','O','O','O'],
-  ['G','G','G','G','G','G','G','G','G','G','G','G','G','G'],
-  ['G','G','G','G','G','G','G','G','G','G','G','G','G','G'],
   ['Y','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y'],
-  ['Y','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y']
+  ['Y','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y','Y'],
+  ['G','G','G','G','G','G','G','G','G','G','G','G','G','G'],
+  ['G','G','G','G','G','G','G','G','G','G','G','G','G','G'],
+  ['B','B','B','B','B','B','B','B','B','B','B','B','B','B'],
+  ['B','B','B','B','B','B','B','B','B','B','B','B','B','B']
+  
 ];
 
 // crear una asignación entre el código corto de color (R, O, G, Y) y el nombre de la color
 const colorMap = {
   'R': 'red',
-  'O': 'orange',
+  'B': 'blue',
   'G': 'green',
-  'Y': 'yellow'
+  'Y': 'yellow',
+  'P': 'purple',
+  'N': 'black'
 };
 
-// Usa un espacio de 2px entre cada ladrillo
-const brickGap = 2;
-const brickWidth = 12;
+const brickGap = 5  ;
+const brickWidth = 50;
 const brickHeight = 8;
 
-// El ancho de la pared ocupa el espacio restante del ancho del lienzo. con 14 ladrillos
-// y 13 espacios de 2px entre ellos, es decir: 400 - (14 * 25 + 2 * 13) = 24px. Por lo tanto, cada
-// La pared será de 12px
-const wallSize = 12;
+
+const wallSize = 0;
 const bricks = [];
 
 // Crea el nivel haciendo un bucle sobre cada fila y columna de la matriz Level1
@@ -59,8 +67,8 @@ for (let row = 0; row < level1.length; row++) {
 const paddle = {
  
   x: canvas.width / 2 - brickWidth / 2,
-  y: 440,
-  width: brickWidth,
+  y: 480,
+  width: 80,
   height: brickHeight,
 
   //Barra x Velocidad
