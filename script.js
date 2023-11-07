@@ -82,8 +82,8 @@ const paddle = {
 };
 
 const ball = {
-  x: 130,
-  y: 260,
+  x: paddle.x + paddle.width / 2 - 5, 
+  y: paddle.y - 10,
   width: 10,
   height: 10,
 
@@ -144,8 +144,8 @@ function loop() {
 
   // reinicia la bola si pasa por debajo de la pantalla
   if (ball.y > canvas.height) {
-    ball.x = 130;
-    ball.y = 260;
+    ball.x = paddle.x + paddle.width / 2 - ball.width / 2;
+    ball.y = paddle.y - ball.height;
     ball.dx = 0;
     ball.dy = 0;
   }
@@ -214,6 +214,15 @@ function loop() {
 
 // felchas derecha izq
 document.addEventListener('keydown', function(e) {
+
+  if (e.which === 32) {
+    if (ball.dx === 0 && ball.dy === 0) {
+      // Iniciar el juego configurando las velocidades de la bola
+      ball.dx = 4;  // Ajusta la velocidad inicial según tu preferencia
+      ball.dy = -4;
+    }
+  }
+
   // izquierda velocidad
   if (e.which === 37) {
     paddle.dx = -10;
@@ -225,10 +234,6 @@ document.addEventListener('keydown', function(e) {
 
   // ezpacio
   // empieza el juego pulsando el espacio
-  if (ball.dx === 0 && ball.dy === 0 && e.which === 32) {
-    ball.dx = ball.speed;
-    ball.dy = ball.speed;
-  }
 });
 
 // para el paddle
