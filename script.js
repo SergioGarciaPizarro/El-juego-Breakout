@@ -210,11 +210,11 @@ function loop() {
 document.addEventListener('keydown', function(e) {
   // izquierda velocidad
   if (e.which === 37) {
-    paddle.dx = -10;
+    paddle.dx = -9;
   }
   // derecha velocidad
   else if (e.which === 39) {
-    paddle.dx = 10;
+    paddle.dx = 9;
   }
 
   // ezpacio
