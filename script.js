@@ -3,6 +3,7 @@ const context = canvas.getContext('2d');
 
 const divJuego = document.querySelector('.juego');
 
+
 // Obtener las dimensiones del div "juego"
 const divAncho = divJuego.offsetWidth;
 const divAlto = divJuego.offsetHeight;
@@ -29,7 +30,7 @@ const level1 = [
   
 ];
 
-// crear una asignación entre el código corto de color (R, O, G, Y) y el nombre de la color
+// crear una asignación entre el código corto de color (R, O, G, Y, P, N) y el nombre de la color
 const colorMap = {
   'R': 'red',
   'B': 'blue',
@@ -38,6 +39,8 @@ const colorMap = {
   'P': 'purple',
   'N': 'black'
 };
+
+
 
 const brickGap = 5  ;
 const brickWidth = 50;
@@ -70,9 +73,23 @@ const paddle = {
   y: 480,
   width: 80,
   height: brickHeight,
-
+  
   //Barra x Velocidad
   dx: 0
+};
+
+const ball = {
+  x: 130,
+  y: 260,
+  width: 10,
+  height: 10,
+
+
+  speed: 4,
+
+  // ball velocity
+  dx: 0,
+  dy: 0
 };
 
 // comprobar si hay colisiones entre dos objetos mediante el cuadro delimitador alineado con el eje (AABB)
@@ -90,65 +107,130 @@ function loop() {
 
   // Mueve la barra por su velocidad
   paddle.x += paddle.dx;
+
   
-  // Dibuja muros
+// evita que la paleta atraviese las paredes
+  if (paddle.x < wallSize) {
+    paddle.x = wallSize
+  }
+  else if (paddle.x + brickWidth > canvas.width - wallSize) {
+    paddle.x = canvas.width - wallSize - brickWidth;
+  }
+
+
+// mueve la pelota según su velocidad
+  ball.x += ball.dx;
+  ball.y += ball.dy;
+
+
+// evita que la pelota atraviese las paredes cambiando su velocidad
+  // paredes izquierda y derecha
+  if (ball.x < wallSize) {
+    ball.x = wallSize;
+    ball.dx *= -1;
+  }
+  else if (ball.x + ball.width > canvas.width - wallSize) {
+    ball.x = canvas.width - wallSize - ball.width;
+    ball.dx *= -1;
+  }
+// pared superior
+  if (ball.y < wallSize) {
+    ball.y = wallSize;
+    ball.dy *= -1;
+  }
+
+  // reinicia la bola si pasa por debajo de la pantalla
+  if (ball.y > canvas.height) {
+    ball.x = 130;
+    ball.y = 260;
+    ball.dx = 0;
+    ball.dy = 0;
+  }
+
+  
+  // comprueba si la pelota choca con la paleta. si cambian la velocidad 
+  if (collides(ball, paddle)) {
+    ball.dy *= -1;
+
+    
+    // mueve la pelota por encima de la paleta, de lo contrario la colisión volverá a ocurrir
+    // en el siguiente fotograma
+    ball.y = paddle.y - ball.height;
+  }
+
+    // comprueba si la bola choca con un ladrillo. Si es así, retira el ladrillo.
+    // y cambiar la velocidad de la bola según el lado en el que se golpeó el ladrillo
+  for (let i = 0; i < bricks.length; i++) {
+    const brick = bricks[i];
+
+    if (collides(ball, brick)) {
+      // remove brick from the bricks array
+      bricks.splice(i, 1);
+
+      
+      // la bola está encima o debajo del ladrillo, cambia la velocidad y
+      // toma en cuenta la velocidad de la bola ya que estará dentro del ladrillo cuando
+      // choca
+      if (ball.y + ball.height - ball.speed <= brick.y ||
+          ball.y >= brick.y + brick.height - ball.speed) {
+        ball.dy *= -1;
+      }
+      // la bola está a cada lado del ladrillo, cambia x velocidad
+      else {
+        ball.dx *= -1;
+      }
+
+      break;
+    }
+  }
+
+  // draw walls
   context.fillStyle = 'lightgrey';
   context.fillRect(0, 0, canvas.width, wallSize);
   context.fillRect(0, 0, wallSize, canvas.height);
   context.fillRect(canvas.width - wallSize, 0, wallSize, canvas.height);
 
-  // Dibujar ladrillos
+  // dibuja bola
+  if (ball.dx || ball.dy) {
+    context.fillRect(ball.x, ball.y, ball.width, ball.height);
+  }
+
+  // dibuja los bloques
   bricks.forEach(function(brick) {
     context.fillStyle = brick.color;
     context.fillRect(brick.x, brick.y, brick.width, brick.height);
   });
 
-  // draw paddle
+  // dibuja barra
   context.fillStyle = 'cyan';
   context.fillRect(paddle.x, paddle.y, paddle.width, paddle.height);
 }
 
-// Escuchar eventos de teclado para mover la barra
+// felchas derecha izq
 document.addEventListener('keydown', function(e) {
-
-  // tecla de flecha izquierda
+  // izquierda velocidad
   if (e.which === 37) {
-    paddle.dx = -3;
+    paddle.dx = -10;
   }
- 
-  // tecla de flecha derecha
+  // derecha velocidad
   else if (e.which === 39) {
-    paddle.dx = 3;
+    paddle.dx = 10;
   }
 
-  
+  // ezpacio
+  // empieza el juego pulsando el espacio
+  if (ball.dx === 0 && ball.dy === 0 && e.which === 32) {
+    ball.dx = ball.speed;
+    ball.dy = ball.speed;
+  }
 });
 
-// Escuche los eventos del teclado para detener la paleta si se suelta la tecla
+// para el paddle
 document.addEventListener('keyup', function(e) {
   if (e.which === 37 || e.which === 39) {
     paddle.dx = 0;
   }
 });
 
-// iniciar juego
+// comienzo del juego
 requestAnimationFrame(loop);
-
-document.addEventListener("DOMContentLoaded", function () {
-    const canvas = document.getElementById("myCanvas");
-    const backgroundMusic = document.getElementById("backgroundMusic");
-
-    // Reproducir la música de fondo cuando el juego comienza
-    function startGame() {
-        backgroundMusic.play();
-        // Aquí puedes iniciar el juego Breakout
-    }
-
-    // Pausar la música de fondo cuando el juego se detiene
-    function stopGame() {
-        backgroundMusic.pause();
-        // Aquí puedes detener el juego Breakout
-    }
-
-    startGame();
-});
