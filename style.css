@@ -78,6 +78,7 @@ header {
   overflow: hidden;
   cursor: pointer;
   transition: color 0.4s, background-color 0.4s;
+  text-decoration: none;
 }
 
 .Reiniciar::before {
