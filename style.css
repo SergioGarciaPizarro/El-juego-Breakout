@@ -123,5 +123,11 @@ header {
   height: 35px;
 }
 
-
+.puntuacion{
+  padding: 15px 30px;
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: 5px;
+}
 
