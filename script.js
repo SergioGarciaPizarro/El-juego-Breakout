@@ -83,10 +83,7 @@ const ball = {
   y: paddle.y - 10,
   width: 10,
   height: 10,
-
-
   speed: 4,
-
   // ball velocity
   dx: 0,
   dy: 0
@@ -100,6 +97,7 @@ function collides(obj1, obj2) {
          obj1.y + obj1.height > obj2.y;
 }
 
+let contador = 4;
 // Bucle de juego
 function loop() {
   requestAnimationFrame(loop);
@@ -145,7 +143,9 @@ function loop() {
     ball.y = paddle.y - ball.height;
     ball.dx = 0;
     ball.dy = 0;
-  }
+    contador--; // Decrementar el contador en 1
+    eliminarImagen(contador);
+}
 
   
   // comprueba si la pelota choca con la paleta. si cambian la velocidad 
@@ -238,4 +238,15 @@ document.addEventListener('keyup', function(e) {
 });
 
 // comienzo del juego
+
+function eliminarImagen(contador) {
+  const elementoEliminar = document.getElementById(contador);
+  if (elementoEliminar) {
+      elementoEliminar.remove(); // Eliminar la imagen correspondiente
+  } else {
+      console.log("No se encontró ningún elemento con el ID proporcionado");
+  }
+}
+
+// Llamar a la función eliminarImagen para que empiece a verificar en cada fotograma
 requestAnimationFrame(loop);
