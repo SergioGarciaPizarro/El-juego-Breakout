@@ -3,6 +3,8 @@ const context = canvas.getContext('2d');
 
 const divJuego = document.querySelector('.juego');
 
+let score=0;
+
 
 // Obtener las dimensiones del div "juego"
 const divAncho = divJuego.offsetWidth;
@@ -49,6 +51,7 @@ const brickHeight = 8;
 
 const wallSize = 0;
 const bricks = [];
+
 
 // Crea el nivel haciendo un bucle sobre cada fila y columna de la matriz Level1
 // y crear un objeto con la posición de los ladrillos (x, y) y el color
@@ -175,11 +178,14 @@ function loop() {
           ball.y >= brick.y + brick.height - ball.speed) {
         ball.dy *= -1;
       }
+
       // la bola está a cada lado del ladrillo, cambia x velocidad
       else {
         ball.dx *= -1;
       }
-
+      //puntuacion
+      score++;
+      document.getElementById("puntua").textContent = "Puntuacion: " + score;
       break;
     }
   }
@@ -210,11 +216,11 @@ function loop() {
 document.addEventListener('keydown', function(e) {
   // izquierda velocidad
   if (e.which === 37) {
-    paddle.dx = -9;
+    paddle.dx = -10;
   }
   // derecha velocidad
   else if (e.which === 39) {
-    paddle.dx = 9;
+    paddle.dx = 10;
   }
 
   // ezpacio
