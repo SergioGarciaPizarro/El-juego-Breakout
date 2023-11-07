@@ -213,7 +213,7 @@ function loop() {
 }
 
 // felchas derecha izq
-document.addEventListener('keydown', function(e) {
+onkeydown = (e) =>{
 
   if (e.which === 32) {
     if (ball.dx === 0 && ball.dy === 0) {
@@ -234,7 +234,7 @@ document.addEventListener('keydown', function(e) {
 
   // ezpacio
   // empieza el juego pulsando el espacio
-});
+};
 
 // para el paddle
 document.addEventListener('keyup', function(e) {
@@ -250,6 +250,7 @@ function eliminarImagen(contador) {
   if (contador>=2) {
     elementoEliminar.remove(); // Eliminar la imagen correspondiente
   } else {
+    onkeydown = () => {};
     elementoEliminar.remove(); // Eliminar la imagen correspondiente
     const gameOverText = document.createElement("h1");
     gameOverText.textContent = "GAME OVER";
