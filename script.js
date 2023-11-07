@@ -247,12 +247,21 @@ document.addEventListener('keyup', function(e) {
 
 function eliminarImagen(contador) {
   const elementoEliminar = document.getElementById(contador);
-  if (elementoEliminar) {
-      elementoEliminar.remove(); // Eliminar la imagen correspondiente
+  if (contador>=2) {
+    elementoEliminar.remove(); // Eliminar la imagen correspondiente
   } else {
-      console.log("No se encontró ningún elemento con el ID proporcionado");
+    elementoEliminar.remove(); // Eliminar la imagen correspondiente
+    const gameOverText = document.createElement("h1");
+    gameOverText.textContent = "GAME OVER";
+    gameOverText.style.fontSize = "100px"; // Tamaño grande del texto
+    gameOverText.style.position = "absolute";
+    gameOverText.style.top = "50%";
+    gameOverText.style.left = "50%";
+    gameOverText.style.transform = "translate(-50%, -50%)"; // Centrar el texto
+    document.body.appendChild(gameOverText);
   }
 }
+
 
 // Llamar a la función eliminarImagen para que empiece a verificar en cada fotograma
 requestAnimationFrame(loop);
