@@ -29,7 +29,6 @@ const level1 = [
   ['G','G','G','G','G','G','G','G','G','G','G','G','G','G'],
   ['B','B','B','B','B','B','B','B','B','B','B','B','B','B'],
   ['B','B','B','B','B','B','B','B','B','B','B','B','B','B']
-  
 ];
 
 // crear una asignación entre el código corto de color (R, O, G, Y, P, N) y el nombre de la color
@@ -55,17 +54,26 @@ const bricks = [];
 
 // Crea el nivel haciendo un bucle sobre cada fila y columna de la matriz Level1
 // y crear un objeto con la posición de los ladrillos (x, y) y el color
+// Ampliación: Bloques con vida
 for (let row = 0; row < level1.length; row++) {
   for (let col = 0; col < level1[row].length; col++) {
     const colorCode = level1[row][col];
+    let vidas = 1;
 
-    bricks.push({
-      x: wallSize + (brickWidth + brickGap) * col,
-      y: wallSize + (brickHeight + brickGap) * row,
-      color: colorMap[colorCode],
-      width: brickWidth,
-      height: brickHeight
-    });
+    if (colorCode === 'R' || colorCode === 'P') {
+      vidas = 2;
+    }
+
+    if (colorCode !== 'N') {
+      bricks.push({
+        x: wallSize + (brickWidth + brickGap) * col,
+        y: wallSize + (brickHeight + brickGap) * row,
+        color: colorMap[colorCode],
+        width: brickWidth,
+        height: brickHeight,
+        vidas: vidas
+      });
+    }
   }
 }
 
@@ -163,32 +171,33 @@ function loop() {
 
     // comprueba si la bola choca con un ladrillo. Si es así, retira el ladrillo.
     // y cambiar la velocidad de la bola según el lado en el que se golpeó el ladrillo
-  for (let i = 0; i < bricks.length; i++) {
-    const brick = bricks[i];
-
-    if (collides(ball, brick)) {
-      // remove brick from the bricks array
-      bricks.splice(i, 1);
-      
-      
-      // la bola está encima o debajo del ladrillo, cambia la velocidad y
-      // toma en cuenta la velocidad de la bola ya que estará dentro del ladrillo cuando
-      // choca
-      if (ball.y + ball.height - ball.speed <= brick.y ||
-          ball.y >= brick.y + brick.height - ball.speed) {
-        ball.dy *= -1;
+    // Ampliaciín: Bloques con vidas
+    for (let i = 0; i < bricks.length; i++) {
+      const brick = bricks[i];
+    
+      if (collides(ball, brick)) {
+        if (brick.vidas > 1) {
+          brick.vidas--;
+        } else {
+          // Eliminar el bloque si se queda sin vidas
+          bricks.splice(i, 1);
+        }
+    
+        // La lógica de rebote y puntuación sigue siendo la misma
+        if (ball.y + ball.height - ball.speed <= brick.y ||
+            ball.y >= brick.y + brick.height - ball.speed) {
+          ball.dy *= -1;
+        } else {
+          ball.dx *= -1;
+        }
+    
+        // Aumentar la puntuación
+        score++;
+        document.getElementById("puntua").textContent = "Puntuación: " + score;
+    
+        break;
       }
-
-      // la bola está a cada lado del ladrillo, cambia x velocidad
-      else {
-        ball.dx *= -1;
-      }
-      //puntuacion
-      score++;
-      document.getElementById("puntua").textContent = "Puntuacion: " + score;
-      break;   
     }
-  }
   
   if (bricks.length === 0) {
   victoria(); // Llamar a la función victoria si no quedan ladrillos
