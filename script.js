@@ -181,20 +181,18 @@ function loop() {
 
     if (collides(ball, brick)) {
       musicaDisparo.play();
-      // remove brick from the bricks array
-      bricks.splice(i, 1);
-      
-      
-      // la bola está encima o debajo del ladrillo, cambia la velocidad y
-      // toma en cuenta la velocidad de la bola ya que estará dentro del ladrillo cuando
-      // choca
+      if (brick.vidas > 1) {
+        brick.vidas--;
+      } else {
+        // Eliminar el bloque si se queda sin vidas
+        bricks.splice(i, 1);
+      }
+
+      // La lógica de rebote y puntuación sigue siendo la misma
       if (ball.y + ball.height - ball.speed <= brick.y ||
           ball.y >= brick.y + brick.height - ball.speed) {
         ball.dy *= -1;
-      }
-
-      // la bola está a cada lado del ladrillo, cambia x velocidad
-      else {
+      } else {
         ball.dx *= -1;
       }
       //puntuacion
