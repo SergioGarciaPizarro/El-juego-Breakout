@@ -180,6 +180,7 @@ function loop() {
     const brick = bricks[i];
 
     if (collides(ball, brick)) {
+      musicaDisparo.play();
       // remove brick from the bricks array
       bricks.splice(i, 1);
       
