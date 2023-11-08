@@ -169,7 +169,7 @@ function loop() {
     if (collides(ball, brick)) {
       // remove brick from the bricks array
       bricks.splice(i, 1);
-
+      
       
       // la bola está encima o debajo del ladrillo, cambia la velocidad y
       // toma en cuenta la velocidad de la bola ya que estará dentro del ladrillo cuando
@@ -186,9 +186,14 @@ function loop() {
       //puntuacion
       score++;
       document.getElementById("puntua").textContent = "Puntuacion: " + score;
-      break;
+      break;   
     }
   }
+  
+  if (bricks.length === 0) {
+  victoria(); // Llamar a la función victoria si no quedan ladrillos
+  }
+  
 
   // draw walls
   context.fillStyle = 'lightgrey';
@@ -244,6 +249,24 @@ document.addEventListener('keyup', function(e) {
 });
 
 // comienzo del juego
+
+function victoria(){
+const bricks = document.getElementsByClassName("brick"); // Obtener todos los elementos de ladrillo restantes
+    if (bricks.length === 0) {
+        onkeydown = () => {};
+        paddle.dx = 0;
+        ball.dx = 0;
+        ball.dy = 0;
+        const victoryText = document.createElement("h1");
+        victoryText.textContent = "VICTORY";
+        victoryText.style.fontSize = "100px"; // Tamaño grande del texto
+        victoryText.style.position = "absolute";
+        victoryText.style.top = "50%";
+        victoryText.style.left = "50%";
+        victoryText.style.transform = "translate(-50%, -50%)"; // Centrar el texto
+        document.body.appendChild(victoryText);
+    }
+}
 
 function eliminarImagen(contador) {
   const elementoEliminar = document.getElementById(contador);
