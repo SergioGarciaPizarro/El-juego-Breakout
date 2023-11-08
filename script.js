@@ -33,7 +33,6 @@ const level1 = [
   ['G','G','G','G','G','G','G','G','G','G','G','G','G','G'],
   ['B','B','B','B','B','B','B','B','B','B','B','B','B','B'],
   ['B','B','B','B','B','B','B','B','B','B','B','B','B','B']
-  
 ];
 
 // crear una asignación entre el código corto de color (R, O, G, Y, P, N) y el nombre de la color
@@ -59,17 +58,26 @@ const bricks = [];
 
 // Crea el nivel haciendo un bucle sobre cada fila y columna de la matriz Level1
 // y crear un objeto con la posición de los ladrillos (x, y) y el color
+// Ampliación: Bloques con vida
 for (let row = 0; row < level1.length; row++) {
   for (let col = 0; col < level1[row].length; col++) {
     const colorCode = level1[row][col];
+    let vidas = 1;
 
-    bricks.push({
-      x: wallSize + (brickWidth + brickGap) * col,
-      y: wallSize + (brickHeight + brickGap) * row,
-      color: colorMap[colorCode],
-      width: brickWidth,
-      height: brickHeight
-    });
+    if (colorCode === 'R' || colorCode === 'P') {
+      vidas = 2;
+    }
+
+    if (colorCode !== 'N') {
+      bricks.push({
+        x: wallSize + (brickWidth + brickGap) * col,
+        y: wallSize + (brickHeight + brickGap) * row,
+        color: colorMap[colorCode],
+        width: brickWidth,
+        height: brickHeight,
+        vidas: vidas
+      });
+    }
   }
 }
 
@@ -172,7 +180,6 @@ function loop() {
     const brick = bricks[i];
 
     if (collides(ball, brick)) {
-      musicaDisparo.play();
       // remove brick from the bricks array
       bricks.splice(i, 1);
       
