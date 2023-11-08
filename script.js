@@ -1,6 +1,10 @@
 const canvas = document.getElementById('myCanvas');
 const context = canvas.getContext('2d');
 
+const musicaFondo = new Audio('musica/cantina.mp3');
+const musicaDisparo = new Audio('musica/disparo.mp3');
+const musicaEspada = new Audio('musica/espada.mp3');
+
 const divJuego = document.querySelector('.juego');
 
 let score=0;
@@ -103,6 +107,7 @@ function collides(obj1, obj2) {
 let contador = 4;
 // Bucle de juego
 function loop() {
+  musicaFondo.play();
   requestAnimationFrame(loop);
   context.clearRect(0,0,canvas.width,canvas.height);
 
@@ -167,6 +172,7 @@ function loop() {
     const brick = bricks[i];
 
     if (collides(ball, brick)) {
+      musicaDisparo.play();
       // remove brick from the bricks array
       bricks.splice(i, 1);
       
@@ -285,6 +291,7 @@ function eliminarImagen(contador) {
     document.body.appendChild(gameOverText);
   }
 }
+
 
 
 // Llamar a la función eliminarImagen para que empiece a verificar en cada fotograma
