@@ -206,12 +206,8 @@ function loop() {
   victoria(); // Llamar a la función victoria si no quedan ladrillos
   }
   
-
-  // draw walls
-  context.fillStyle = 'lightgrey';
+  context.fillStyle = 'red';
   context.fillRect(0, 0, canvas.width, wallSize);
-  context.fillRect(0, 0, wallSize, canvas.height);
-  context.fillRect(canvas.width - wallSize, 0, wallSize, canvas.height);
 
   // dibuja bola
   if (ball.dx || ball.dy) {
@@ -294,7 +290,7 @@ function eliminarImagen(contador) {
     gameOverText.style.top = "50%";
     gameOverText.style.left = "50%";
     gameOverText.style.transform = "translate(-50%, -50%)"; // Centrar el texto
-    document.body.appendChild(gameOverText);
+    document.body.appendChild(gameOverText); 
   }
 }
 
